@@ -10,6 +10,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 
 namespace OOPProject
@@ -18,15 +19,15 @@ namespace OOPProject
     {
         SqlConnection conn = new SqlConnection("Data Source=DESKTOP-5EIA8UT\\SQLEXPRESS;Initial Catalog=OOP;Integrated Security=True");
 
-        class User
+        public class User
         {
-            public string Name { get; set; }
-            public string Username { get; set; }
-            public string Email { get; set; }
-            public string Password { get; set; }
-            public int Otp { get; set; }
-
-            public User(string name, string username, string email, string password, int otp)
+            protected static string Name;
+            protected static string Username;
+            protected static string Email;
+            protected static string Password;
+            protected static int Otp;
+       
+            public void getdata(string name, string username, string email, string password, int otp)
             {
                 Name = name;
                 Username = username;
@@ -34,7 +35,7 @@ namespace OOPProject
                 Password = password;
                 Otp = otp;
             }
-
+            public User() { }
             public string saveData(string role)
             {
                 return $"INSERT INTO {role.ToLower()} VALUES ('{Name}', '{Username}', '{Email}', '{Password}', '{Otp}')";
@@ -43,27 +44,35 @@ namespace OOPProject
 
         class UserRegistrationManager
         {
-            private SqlConnection Connection { get; }
+            public bool otpsent = false;
+            private SqlConnection Connection;
 
             public UserRegistrationManager(SqlConnection connection)
             {
                 Connection = connection;
             }
 
+            public int GenerateOTP()
+            {
+                Random rand = new Random();
+                return rand.Next(1000, 9999);
+            }
+
             public void RegisterUser(User user, string role)
             {
                 SqlCommand cmd = new SqlCommand(user.saveData(role), Connection);
+
                 try
                 {
                     Connection.Open();
                     cmd.ExecuteNonQuery();
-                    MessageBox.Show($"You are successfully registered as {role}. Please login to your account.", "Message");
                 }
                 catch (SqlException ex)
                 {
                     if (ex.Number == 2627)
                     {
-                        MessageBox.Show("Username is already taken. Please choose a different username.", "Error");
+                        MessageBox.Show("This Email already linked with another account", "Error");
+                        otpsent = false;
                     }
                     else
                     {
@@ -73,11 +82,6 @@ namespace OOPProject
                 Connection.Close();
             }
 
-            public int GenerateOTP()
-            {
-                Random rand = new Random();
-                return rand.Next(1000, 9999);
-            }
 
             public void SendOtpByEmail(string toEmail, int otp)
             {
@@ -102,7 +106,17 @@ namespace OOPProject
                     IsBodyHtml = false,
                 };
 
-                mailMessage.To.Add(toEmail);
+                try
+                {
+                    mailMessage.To.Add(toEmail);
+                    
+                    otpsent = true;
+                }
+                catch (FormatException ex)
+                {
+
+                    MessageBox.Show($"Invalid email format: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
                 try
                 {
@@ -110,9 +124,11 @@ namespace OOPProject
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Failed to send email. Error: {ex.Message}", "Error");
+                    Console.WriteLine(ex.ToString());
+                    ////  MessageBox.Show($"Failed to send email. Error: {ex.Message}", "Error");
                 }
             }
+            
 
         }
 
@@ -122,23 +138,54 @@ namespace OOPProject
             InitializeComponent();
         }
 
-       
+
         private void button1_Click(object sender, EventArgs e)
         {
-            UserRegistrationManager registrationManager = new UserRegistrationManager(conn);
-            string name = txtname.Text;
-            string username = txtusername.Text;
-            string email = txtemail.Text;
-            string password = txtpassword.Text;
-            int otp = registrationManager.GenerateOTP();
+            if (string.IsNullOrEmpty(txtusername.Text) || string.IsNullOrEmpty(txtname.Text) || string.IsNullOrEmpty(txtpassword.Text))
+            {
+                MessageBox.Show("Fill in all the required fields", "Message");
 
-            string role = Rolebox.Text.ToLower();
+            }
+            else
+            {
+                UserRegistrationManager registrationManager = new UserRegistrationManager(conn);
+                string name = txtname.Text;
+                string username = txtusername.Text;
+                string email = txtemail.Text;
+                string password = txtpassword.Text;
+                int otp = registrationManager.GenerateOTP();
 
-            User newUser = new User(name, username, email, password,otp);
 
-            registrationManager.RegisterUser(newUser, role);
-            registrationManager.SendOtpByEmail(email, otp);
-           
+                string role = Rolebox.Text;
+
+
+                //User newUser = new User(name, username, email, password, otp);
+                User newUser = new User();
+                newUser.getdata(name, username, email, password, otp);
+                registrationManager.SendOtpByEmail(email, otp);
+
+                if (registrationManager.otpsent)
+                {
+                    registrationManager.RegisterUser(newUser, role);
+                    otp f2 = new otp();
+                    f2.Show();
+                    Visible = false;
+                }
+                else
+                {
+                    Visible = true;
+                }
+            }
+          
+            }
+
+    
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Login L = new Login();
+            L.Show();
+            Visible=false;
         }
     }
-}
+    }
