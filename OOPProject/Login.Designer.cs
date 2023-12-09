@@ -37,7 +37,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.btnreg = new System.Windows.Forms.Button();
             this.Rolebox = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.Forgetpass = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -133,23 +133,23 @@
             this.Rolebox.TabIndex = 8;
             this.Rolebox.Text = "Select";
             // 
-            // label5
+            // Forgetpass
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Calibri", 10F);
-            this.label5.Location = new System.Drawing.Point(177, 255);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(165, 24);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "Forget Password??";
-            this.label5.Click += new System.EventHandler(this.label5_Click);
+            this.Forgetpass.AutoSize = true;
+            this.Forgetpass.Font = new System.Drawing.Font("Calibri", 10F);
+            this.Forgetpass.Location = new System.Drawing.Point(177, 255);
+            this.Forgetpass.Name = "Forgetpass";
+            this.Forgetpass.Size = new System.Drawing.Size(165, 24);
+            this.Forgetpass.TabIndex = 9;
+            this.Forgetpass.Text = "Forget Password??";
+            this.Forgetpass.Click += new System.EventHandler(this.label5_Click);
             // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(529, 440);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.Forgetpass);
             this.Controls.Add(this.Rolebox);
             this.Controls.Add(this.btnreg);
             this.Controls.Add(this.label4);
@@ -177,6 +177,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnreg;
         private System.Windows.Forms.ComboBox Rolebox;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label Forgetpass;
     }
 }

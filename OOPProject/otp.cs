@@ -37,7 +37,6 @@ namespace OOPProject
                 return $"SELECT * FROM {role.ToLower()} WHERE email = '{Email}'";
             }
         }
-
         class fetchdata : Validate
         {
             private SqlConnection Connection;
@@ -95,14 +94,23 @@ namespace OOPProject
 
         private void btnverify_Click(object sender, EventArgs e)
         {
-            int otp = int.Parse(txtotp.Text);
             string role = rolebox.Text;
+            if (string.IsNullOrEmpty(txtotp.Text)|| role != "Buyer" && role != "Seller")
+            {
+                MessageBox.Show("Fill all the required fields", "Warning");
+            }
+                    else  {
+            int otp = int.Parse(txtotp.Text);
+            if(role == "Buyer" || role == "Seller") { 
             Validate val = new Validate();
             fetchdata fetch = new fetchdata(conn, otp);
             fetch.assigndata(val, role);
             if (fetch.isverified)
             {
                 Visible = false;
+            }
+                
+            }
             }
         }
     }

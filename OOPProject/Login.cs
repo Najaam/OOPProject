@@ -182,46 +182,60 @@ namespace OOPProject
             string email = txtmail.Text;
             string pass = txtpass.Text;
             string role = Rolebox.Text;
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(pass) || role !="Buyer" && role != "Seller")
+            {
+                MessageBox.Show("Fill All the Remaining feilds","Warning");
+            }
+            else
+            {
+                
 
             fetchdata fetch = new fetchdata(conn,email,pass);
             fetch.assigndata( role);
             if (fetch.isverified)
             {
                 Visible = false;
-            }
+                }
+                else
+                {
+                    MessageBox.Show("Wrong Credentials", "Warning");
+                }
 
+
+            }
         }
 
         private void label5_Click(object sender, EventArgs e)
         {
             string email = txtmail.Text;
-            string role=Rolebox.Text;
-            if (string.IsNullOrEmpty(email) && string.IsNullOrEmpty(role))
-            {
-                MessageBox.Show("Enter Your email Address", "Warning");
-
-            }
-            else
-            {
-                Datauser data = new Datauser(email);
-                ForgotOTP fotp = new ForgotOTP(conn);
-                int otp = fotp.GenerateOTP();
-                fotp.SendOtpByEmail(email, otp);
-
-                if (fotp.otpsent)
-                { 
-                    Otpforget f2 = new Otpforget();
-                    f2.Show();
-                    Visible = false;
-                    fotp.updateotp(data, role, otp);
+            string role = Rolebox.Text;
+         
+                if (string.IsNullOrEmpty(email)|| role != "Buyer" && role != "Seller")
+                {
+                    MessageBox.Show("Enter Your email Address and select your role too", "Warning");
                 }
                 else
                 {
-                    Visible=true;
-                    MessageBox.Show("Somthing Wrong", "warning");
-                }
+                    Datauser data = new Datauser(email);
+                    ForgotOTP fotp = new ForgotOTP(conn);
+                    int otp = fotp.GenerateOTP();
+                    fotp.SendOtpByEmail(email, otp);
+
+                    if (fotp.otpsent)
+                    {
+                        Otpforget f2 = new Otpforget();
+                        f2.Show();
+                        Visible = false;
+                        fotp.updateotp(data, role, otp);
+                    }
+                    else
+                    {
+                        Visible = true;
+                        MessageBox.Show("Somthing Wrong", "warning");
+                    }
+                
+
             }
-           
         }
     }
 }

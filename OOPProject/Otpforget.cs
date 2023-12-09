@@ -20,7 +20,7 @@ namespace OOPProject
 
 
 
-        class Validate : Datauser
+        public class Validate : Datauser
         {
 
             protected int OTP;
@@ -33,10 +33,11 @@ namespace OOPProject
                 OTP = o;
             }
 
-            public string getData(string role)
+            public string update(string role, string newpass)
             {
-                return $"SELECT * FROM {role.ToLower()} WHERE email = '{useremail}'";
+                return $"UPDATE {role.ToLower()} SET pass = '{newpass}' WHERE email = '{useremail}'";
             }
+            
         }
 
         class fetchdata : Validate
@@ -53,9 +54,9 @@ namespace OOPProject
 
 
 
-            public void assigndata(Validate val, string role)
+            public void assigndata(string pass, string role)
             {
-                SqlDataAdapter adapter = new SqlDataAdapter(val.getData(role), Connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(getData(role), Connection);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
 
@@ -67,17 +68,24 @@ namespace OOPProject
                     if (userEmail.Equals(useremail) && OTP == userOTP)
                     {
                         isverified = true;
+                        SqlCommand cmd = new SqlCommand(update(role, pass), Connection);
+                        try
+                        {
+                            Connection.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                        catch (SqlException ex)
+                        {
+                            MessageBox.Show($"Error: {ex.Message}", "Error");
+                        }
+                        Connection.Close();
                     }
                     else
                     {
                         MessageBox.Show("Wrong OTP Code", "Warning");
                     }
                 }
-
             }
-
-
-
         }
         public Otpforget()
         {
@@ -86,16 +94,22 @@ namespace OOPProject
 
         private void btnverify_Click(object sender, EventArgs e)
         {
-            int otp = int.Parse(txtotp.Text);
-
-            string role = rolebox.Text;
-            Validate val = new Validate();
+                string role = rolebox.Text;
+            if (string.IsNullOrEmpty(txtotp.Text) || role != "Buyer" && role != "Seller")
+            {
+                MessageBox.Show("Fill all the required fields", "Warning");
+            }
+            else
+            {
+                string pass = txtpass.Text;
+                int otp = int.Parse(txtotp.Text);
+            //Validate val = new Validate();
             fetchdata fetch = new fetchdata(conn, otp);
-            fetch.assigndata(val, role);
+            fetch.assigndata(pass,role);
             if (fetch.isverified)
             {
 
-                Home h = new Home();
+               Home h = new Home();
                 h.Show();
                 Visible = false;
             }
@@ -103,11 +117,11 @@ namespace OOPProject
             {
                 Visible = true;
             }
+                 }
         }
 
-        private void Backbtn_Click(object sender, EventArgs e)
+    private void Backbtn_Click(object sender, EventArgs e)
         {
-         
                 Login f1 = new Login();
                 f1.Show();
                 Visible = false;

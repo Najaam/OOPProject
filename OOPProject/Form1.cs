@@ -26,7 +26,7 @@ namespace OOPProject
             protected static string Email;
             protected static string Password;
             protected static int Otp;
-       
+
             public void getdata(string name, string username, string email, string password, int otp)
             {
                 Name = name;
@@ -109,7 +109,7 @@ namespace OOPProject
                 try
                 {
                     mailMessage.To.Add(toEmail);
-                    
+
                     otpsent = true;
                 }
                 catch (FormatException ex)
@@ -128,7 +128,7 @@ namespace OOPProject
                     ////  MessageBox.Show($"Failed to send email. Error: {ex.Message}", "Error");
                 }
             }
-            
+
 
         }
 
@@ -141,7 +141,7 @@ namespace OOPProject
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtusername.Text) || string.IsNullOrEmpty(txtname.Text) || string.IsNullOrEmpty(txtpassword.Text))
+            if (string.IsNullOrEmpty(txtusername.Text) || string.IsNullOrEmpty(txtname.Text) || string.IsNullOrEmpty(txtpassword.Text) || Rolebox.Text != "Buyer" && Rolebox.Text != "Seller")
             {
                 MessageBox.Show("Fill in all the required fields", "Message");
 
