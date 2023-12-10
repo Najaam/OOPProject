@@ -66,8 +66,9 @@
             this.Viewbtn.Name = "Viewbtn";
             this.Viewbtn.Size = new System.Drawing.Size(100, 48);
             this.Viewbtn.TabIndex = 2;
-            this.Viewbtn.Text = "View";
+            this.Viewbtn.Text = "Edit";
             this.Viewbtn.UseVisualStyleBackColor = true;
+            this.Viewbtn.Click += new System.EventHandler(this.Viewbtn_Click);
             // 
             // Logout
             // 
@@ -78,6 +79,7 @@
             this.Logout.TabIndex = 3;
             this.Logout.Text = "Logout";
             this.Logout.UseVisualStyleBackColor = true;
+            this.Logout.Click += new System.EventHandler(this.Logout_Click);
             // 
             // orderbtn
             // 

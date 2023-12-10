@@ -23,5 +23,19 @@ namespace OOPProject
             ap.Show();
             Visible = false; 
         }
+
+        private void Viewbtn_Click(object sender, EventArgs e)
+        {
+            ViewProduct view = new ViewProduct();   
+            view.Show();
+            Visible=false;
+        }
+
+        private void Logout_Click(object sender, EventArgs e)
+        {
+            Login log = new Login();
+            log.Show();
+            Visible = false;
+        }
     }
 }
