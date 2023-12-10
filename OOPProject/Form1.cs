@@ -166,7 +166,9 @@ namespace OOPProject
 
                 if (registrationManager.otpsent)
                 {
+
                     registrationManager.RegisterUser(newUser, role);
+                    
                     otp f2 = new otp();
                     f2.Show();
                     Visible = false;

@@ -153,8 +153,7 @@ namespace OOPProject
 
                     if (useremail.Equals(userEmail)&& userpassword.Equals(userPass))
                     {
-                        Home h = new Home();
-                        h.Show();
+                    
                         isverified = true;
                     }
                     else
@@ -188,20 +187,25 @@ namespace OOPProject
             }
             else
             {
-                
-
             fetchdata fetch = new fetchdata(conn,email,pass);
             fetch.assigndata( role);
             if (fetch.isverified)
             {
+                    if(role == "Seller")
+                    {
+                        Sellerhome sh = new Sellerhome();   
+                        sh.Show();
+                    }else if(role == "Buyer")
+                    {
+                        Home h = new Home();
+                        h.Show();
+                    }
                 Visible = false;
                 }
                 else
                 {
                     MessageBox.Show("Wrong Credentials", "Warning");
                 }
-
-
             }
         }
 

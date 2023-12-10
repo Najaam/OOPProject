@@ -64,8 +64,7 @@ namespace OOPProject
 
                     if (Email.Equals(userEmail) && OTP == userOTP)
                 {
-                        Home h = new Home();
-                        h.Show();
+                     
                         isverified = true;  
                     }
                     else
@@ -107,9 +106,20 @@ namespace OOPProject
             fetch.assigndata(val, role);
             if (fetch.isverified)
             {
-                Visible = false;
-            }
-                
+
+                        if (role == "Buyer")
+                        {
+                            Home h = new Home();
+                            h.Show();
+                            Visible = false;
+                        }
+                        else if (role == "Seller")
+                        {
+                            Sellerhome sh = new Sellerhome();
+                            sh.Show();
+                            Visible = false;
+                        }
+                    }
             }
             }
         }

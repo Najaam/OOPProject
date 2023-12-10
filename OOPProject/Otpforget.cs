@@ -108,11 +108,19 @@ namespace OOPProject
             fetch.assigndata(pass,role);
             if (fetch.isverified)
             {
-
-               Home h = new Home();
-                h.Show();
-                Visible = false;
-            }
+                    if (role == "Buyer")
+                    {
+                        Home h = new Home();
+                        h.Show();
+                        Visible = false;
+                    }
+                    else if (role == "Seller")
+                    {
+                        Sellerhome sh = new Sellerhome();
+                        sh.Show();
+                        Visible = false; 
+                    }
+                }
             else
             {
                 Visible = true;
