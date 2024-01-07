@@ -39,7 +39,7 @@ namespace OOPProject
         }
         class updateProduct 
         {
-            string email;
+           
             int productid;
             string Productname;
             string Productdescription;
@@ -103,7 +103,7 @@ namespace OOPProject
             string Productname = pname.Text;
             string Productdescription = pdes.Text;
             int Productprice = int.Parse(pprice.Text);
-            if (string.IsNullOrEmpty(Productname) || string.IsNullOrEmpty(Productdescription) || Productprice == null)
+            if (string.IsNullOrEmpty(Productname) || string.IsNullOrEmpty(Productdescription) )
             {
                 MessageBox.Show("Fill all given feilds", "Warning");
             }

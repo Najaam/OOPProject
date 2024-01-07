@@ -16,5 +16,12 @@ namespace OOPProject
         {
             InitializeComponent();
         }
+
+        private void btnmart_Click(object sender, EventArgs e)
+        {
+            Mart m = new Mart();
+            m.Show();
+            Visible = false;
+        }
     }
 }

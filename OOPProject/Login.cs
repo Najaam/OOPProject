@@ -237,8 +237,6 @@ namespace OOPProject
                         Visible = true;
                         MessageBox.Show("Somthing Wrong", "warning");
                     }
-                
-
             }
         }
     }

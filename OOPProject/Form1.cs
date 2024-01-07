@@ -18,7 +18,6 @@ namespace OOPProject
     public partial class Form1 : Form
     {
         SqlConnection conn = new SqlConnection("Data Source=DESKTOP-5EIA8UT\\SQLEXPRESS;Initial Catalog=OOP;Integrated Security=True");
-
         public class User
         {
             protected static string Name;
@@ -133,6 +132,7 @@ namespace OOPProject
         }
 
 
+        
         public Form1()
         {
             InitializeComponent();
@@ -179,11 +179,7 @@ namespace OOPProject
                 }
             }
           
-            }
-
-    
-
-        private void button2_Click(object sender, EventArgs e)
+}       private void button2_Click(object sender, EventArgs e)
         {
             Login L = new Login();
             L.Show();
