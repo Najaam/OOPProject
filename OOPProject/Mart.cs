@@ -80,7 +80,7 @@ namespace OOPProject
                 {
                     connection.Open();
                     cmd.ExecuteNonQuery();
-                    MessageBox.Show("Product Updated SuccessFully", "Alert");
+                    MessageBox.Show("Product Added to Cart SuccessFully", "Alert");
                 }
 
                 catch (Exception ex)

@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,10 +17,30 @@ namespace OOPProject
     {
         SqlConnection conn = new SqlConnection("Data Source=DESKTOP-5EIA8UT\\SQLEXPRESS;Initial Catalog=OOP;Integrated Security=True");
 
+        class CheckAddress : Datauser
+        {
+            public bool isAvailable = false;
+
+            public CheckAddress(SqlConnection connect)
+            {
+                string query = $"SELECT * FROM userdata WHERE email = '{useremail}'";
+                SqlDataAdapter adapter = new SqlDataAdapter(query, connect);
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+
+                if (dt.Rows.Count > 0)
+                {
+                    isAvailable = true;
+                }
+                else
+                {
+                    MessageBox.Show("Bill Address not set yet");
+                }
+            }
+        }
+
         class cartview :Datauser
         {
-        
-
             public cartview(SqlConnection connect, DataGridView dView)
             {
                 string qurey = $"SELECT pname, pprice, pquant FROM cart WHERE email = '{useremail}'";
@@ -37,6 +58,7 @@ namespace OOPProject
 
                 }
             }
+
         }
 
         class History : Datauser
@@ -67,15 +89,33 @@ namespace OOPProject
                 {
                     connection.Open();
                     cmd.ExecuteNonQuery();
-                    MessageBox.Show("Product Updated Successfully", "Alert");
+                    MessageBox.Show("Orders Placed Sucessfully", "Alert");
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Exception");
                 }
                     connection.Close();
-                
             }
+            public void DeleteFromCart(SqlConnection connection, string productName)
+            {
+                string deleteQuery = $"DELETE FROM cart WHERE email = '{useremail}' AND pname = '{productName}'";
+
+                using (SqlCommand cmd = new SqlCommand(deleteQuery, connection))
+                {
+                    try
+                    {
+                        connection.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Exception");
+                    }
+                }
+                connection.Close();
+            }
+
         }
         public Cart()
         {
@@ -84,9 +124,11 @@ namespace OOPProject
 
         private void Confirmbtn_Click(object sender, EventArgs e)
         {
-         
-            string Productname = pname.Text;
+            CheckAddress check = new CheckAddress(conn);
+            if (check.isAvailable == true)
+            {
             int Productquantity = int.Parse(quantity.Text);
+            string Productname = pname.Text;
             int Productprice = int.Parse(price.Text);
             int Totalprice = int.Parse(totalprice.Text);
             if (string.IsNullOrEmpty(Productname) || Productprice == null || Productprice == null)
@@ -97,6 +139,13 @@ namespace OOPProject
             {
                 History add = new History(Productname, Productquantity, Productprice,Totalprice);
                 add.addData(conn);
+                add.DeleteFromCart(conn, Productname);
+                RefreshCartView();
+            }
+            }
+            else
+            {
+                MessageBox.Show("Bill Address not set yet");
             }
             pname.Clear();
             price.Clear();
@@ -130,5 +179,11 @@ private void selectdata(object sender, DataGridViewCellEventArgs e)
             h.Show();
             Visible = false;
         }
+        private void RefreshCartView()
+        {
+            cartview c = new cartview(conn, datagrid);
+        }
     }
+
 }
+
