@@ -30,7 +30,7 @@ namespace OOPProject
                 adapter.Fill(dt);
                 if (dt == null)
                 {
-
+                    MessageBox.Show("Data is Empty");
                 }
                 else
                 {
@@ -40,7 +40,24 @@ namespace OOPProject
             }
         }
 
-
+        class MartView
+        {
+            public MartView(SqlConnection connect, DataGridView dView, string search)
+            {
+                string query = $"SELECT pname, pprice FROM Product WHERE pname LIKE '%{search}%'";
+                SqlDataAdapter adapter = new SqlDataAdapter(query, connect);
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+                if (dt == null || dt.Rows.Count == 0)
+                {
+                    MessageBox.Show("No matching data found");
+                }
+                else
+                {
+                    dView.DataSource = dt;
+                }
+            }
+        }
         class Addtocart: Datauser
         {
             string email;
@@ -87,7 +104,6 @@ namespace OOPProject
         private void SelectData(object sender, DataGridViewCellEventArgs e)
         {
             int count = dataview.CurrentRow.Index;
-            //productid = Convert.ToInt32(dataview.Rows[count].Cells[0].Value.ToString());
 
             Pname.Text = dataview.Rows[count].Cells[0].Value.ToString();
             Pprice.Text = dataview.Rows[count].Cells[1].Value.ToString();
@@ -115,6 +131,18 @@ namespace OOPProject
             Pname.Clear();
             Qbox.Clear();
             Pprice.Clear();
+        }
+
+        private void sreachbox_TextChanged(object sender, EventArgs e)
+        {
+            MartView v = new MartView(conn, dataview, sreachbox.Text);
+        }
+
+        private void Backbtn_Click(object sender, EventArgs e)
+        {
+              Home h = new Home();
+            h.Show();
+            Visible = false;
         }
     }
 }

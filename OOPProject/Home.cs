@@ -23,5 +23,26 @@ namespace OOPProject
             m.Show();
             Visible = false;
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Cart C = new Cart();
+            C.Show();
+            Visible = false;
+        }
+
+        private void addadress_Click(object sender, EventArgs e)
+        {
+            Address address = new Address();        
+               address.Show();
+            Visible = false;
+        }
+
+        private void logout_Click(object sender, EventArgs e)
+        {
+            Login login = new Login();  
+            login.Show();
+            Visible =false; 
+        }
     }
 }
